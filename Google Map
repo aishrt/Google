@@ -1,0 +1,426 @@
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import axiosmod from 'axios';
+
+
+const googleMapAPIkey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
+
+// -------------- google maps --------------------
+
+function Map({
+  location,
+  // addressDetails,
+  setAddressDetails,
+}: {
+  location: any;
+  addressDetails: any;
+  setAddressDetails: any;
+}) {
+  const [userLat, setUserLat] = useState(37.0902);
+  const [userLong, setUserLong] = useState(95.7129);
+  const center = { lat: userLat, lng: userLong };
+
+  const geocoder = new google.maps.Geocoder();
+
+  useEffect(() => {
+    getLocationDetails();
+  }, [center]);
+
+  const getLocationDetails = () => {
+    geocoder.geocode({ location: center }).then((response) => {
+      if (response.results[0]) {
+        setAddressDetails({
+          latitude: userLat,
+          longitude: userLong,
+          address_line: response.results[0].formatted_address,
+        });
+      } else {
+        console.log('No results found');
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (location?.lat) {
+      setUserLat(parseFloat(location?.lat));
+      setUserLong(parseFloat(location?.lng));
+      getLocationDetails();
+    }
+  }, [location]);
+
+  return (
+    <GoogleMap
+      zoom={10}
+      center={center}
+      mapContainerClassName="map-container"
+      onClick={(e) => {
+        setUserLat(e.latLng?.lat() || 0);
+        setUserLong(e.latLng?.lng() || 0);
+      }}
+    >
+      <Marker position={center} />
+    </GoogleMap>
+  );
+}
+
+type LocationCoordinates = {
+  lat?: number;
+  lng?: number;
+};
+
+// ---------------google maps -------------------
+
+  const [address, setAddress] = useState<string>('');
+  const [value, setValue] = useState(null);
+  const [latitude, setlatitude] = useState(0);
+  const [longitude, setlongitude] = useState(0);
+  const [addressValue, setAddressValue] = useState<string>('');
+  const [location, setLocation] = useState<LocationCoordinates>({} as LocationCoordinates);
+  const [addressDetails, setAddressDetails] = useState({
+    address_line: '',
+    latitude: '',
+    longitude: '',
+  });
+
+  useEffect(() => {
+    setlatitude(addressDetails?.latitude);
+    setlongitude(addressDetails?.longitude);
+    setAddressValue(addressDetails?.address_line);
+  }, [addressDetails]);
+  console.log({ latitude, longitude, addressValue });
+
+ const handleChangeLocation = async (value: any) => {
+    const placeId = value.value.place_id;
+    const { data } = await axiosmod.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${googleMapAPIkey}`
+    );
+    const location = data?.results[0]?.geometry?.location;
+    if (location) {
+      setLocation(location);
+      setAddress(value.label);
+      setValue(value);
+    }
+  };
+
+
+  ======================================
+
+
+    <div style={{ width: '100%' }}>
+                              <div style={{ width: '100%', height: '80%' }}>
+                                <Map
+                                  location={location}
+                                  setAddressDetails={setAddressDetails}
+                                  addressDetails={addressDetails}
+                                />
+                              </div>
+                            </div>
+                            <br />
+                            <div className="col-12">
+                              <div className="pt-2 pb-2">
+                                <GooglePlacesAutocomplete
+                                  selectProps={{
+                                    defaultInputValue: user?.location ? user?.location : '',
+                                    value,
+                                    onChange: handleChangeLocation,
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                values.latitude = latitude;
+    values.longitude = longitude;
+    values.location = addressValue;
+
+
+
+
+
+
+
+
+
+    ==============================
+    Abhishek ko jo bheja h 
+    +++++++++++++++++++++++++++++
+
+
+    REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyD6K2JhSDdRX1pNn2dmnd5oX4TWlfGxfmU
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import axiosmod from 'axios';
+
+
+const googleMapAPIkey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
+
+// -------------- google maps --------------------
+
+function Map({
+ location,
+ // addressDetails,
+ setAddressDetails,
+}: {
+ location: any;
+ addressDetails: any;
+ setAddressDetails: any;
+}) {
+ const [userLat, setUserLat] = useState(37.0902);
+ const [userLong, setUserLong] = useState(95.7129);
+ const center = { lat: userLat, lng: userLong };
+
+ const geocoder = new google.maps.Geocoder();
+
+ useEffect(() => {
+    getLocationDetails();
+ }, [center]);
+
+ const getLocationDetails = () => {
+   geocoder.geocode({ location: center }).then((response) => {
+     if (response.results[0]) {
+       setAddressDetails({
+         latitude: userLat,
+         longitude: userLong,
+         address_line: response.results[0].formatted_address,
+       });
+     } else {
+       console.log('No results found');
+     }
+   });
+ };
+
+ useEffect(() => {
+   if (location?.lat) {
+     setUserLat(parseFloat(location?.lat));
+     setUserLong(parseFloat(location?.lng));
+     getLocationDetails();
+   }
+ }, [location]);
+
+ return (
+   <GoogleMap
+     zoom={10}
+     center={center}
+     mapContainerClassName="map-container"
+     onCl ick={(e) => {
+       setUserLat(e.latLng?.lat() || 0);
+       setUserLong(e.latLng?.lng() || 0);
+     }}
+   >
+     <Marker position={center} />
+   </GoogleMap>
+ );
+}
+
+type LocationCoordinates = {
+ lat?: number;
+ lng?: number;
+};
+
+// ---------------google maps -------------------
+
+ const [address, setAddress] = useState<string>('');
+ const [value, setValue] = useState(null);
+ const [latitude, setlatitude] = useState(0);
+ const [longitude, setlongitude] = useState(0);
+ const [addressValue, setAddressValue] = useState<string>('');
+ const [location, setLocation] = useState<LocationCoordinates>({} as LocationCoordinates);
+ const [addressDetails, setAddressDetails] = useState({
+   address_line: '',
+   latitude: '',
+   longitude: '',
+ });
+
+ useEffect(() => {
+   setlatitude(addressDetails?.latitude);
+   setlongitude(addressDetails?.longitude);
+   setAddressValue(addressDetails?.address_line);
+ }, [addressDetails]);
+ console.log({ latitude, longitude, addressValue });
+
+const handleChangeLocation = async (value: any) => {
+   const placeId = value.value.place_id;
+   const { data } = await axiosmod.get(
+     `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${googleMapAPIkey}`
+   );
+   const location = data?.results[0]?.geometry?.location;
+   if (location) {
+     setLocation(location);
+     setAddress(value.label);
+     setValue(value);
+   }
+ };
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import axiosmod from 'axios';
+
+
+const googleMapAPIkey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
+
+// -------------- google maps --------------------
+
+function Map({
+ location,
+ // addressDetails,
+ setAddressDetails,
+}: {
+ location: any;
+ addressDetails: any;
+ setAddressDetails: any;
+}) {
+ const [userLat, setUserLat] = useState(37.0902);
+ const [userLong, setUserLong] = useState(95.7129);
+ const center = { lat: userLat, lng: userLong };
+
+ const geocoder = new google.maps.Geocoder();
+
+ useEffect(() => {
+    getLocationDetails();
+ }, [center]);
+
+ const getLocationDetails = () => {
+   geocoder.geocode({ location: center }).then((response) => {
+     if (response.results[0]) {
+       setAddressDetails({
+         latitude: userLat,
+         longitude: userLong,
+         address_line: response.results[0].formatted_address,
+       });
+     } else {
+       console.log('No results found');
+     }
+   });
+ };
+
+ useEffect(() => {
+   if (location?.lat) {
+     setUserLat(parseFloat(location?.lat));
+     setUserLong(parseFloat(location?.lng));
+     getLocationDetails();
+   }
+ }, [location]);
+
+ return (
+   <GoogleMap
+     zoom={10}
+     center={center}
+     mapContainerClassName="map-container"
+     onCl ick={(e) => {
+       setUserLat(e.latLng?.lat() || 0);
+       setUserLong(e.latLng?.lng() || 0);
+     }}
+   >
+     <Marker position={center} />
+   </GoogleMap>
+ );
+}
+
+type LocationCoordinates = {
+ lat?: number;
+ lng?: number;
+};
+
+// ---------------google maps -------------------
+
+ const [address, setAddress] = useState<string>('');
+ const [value, setValue] = useState(null);
+ const [latitude, setlatitude] = useState(0);
+ const [longitude, setlongitude] = useState(0);
+ const [addressValue, setAddressValue] = useState<string>('');
+ const [location, setLocation] = useState<LocationCoordinates>({} as LocationCoordinates);
+ const [addressDetails, setAddressDetails] = useState({
+   address_line: '',
+   latitude: '',
+   longitude: '',
+ });
+
+ useEffect(() => {
+   setlatitude(addressDetails?.latitude);
+   setlongitude(addressDetails?.longitude);
+   setAddressValue(addressDetails?.address_line);
+ }, [addressDetails]);
+ console.log({ latitude, longitude, addressValue });
+
+const handleChangeLocation = async (value: any) => {
+   const placeId = value.value.place_id;
+   const { data } = await axiosmod.get(
+     `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${googleMapAPIkey}`
+   );
+   const location = data?.results[0]?.geometry?.location;
+   if (location) {
+     setLocation(location);
+     setAddress(value.label);
+     setValue(value);
+   }
+ };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ======================================
+
+
+   <div st yle={{ width: '100%' }}>
+                             <div st yle={{ width: '100%', height: '80%' }}>
+                               <Map
+                                 location={location}
+                                 setAddressDetails={setAddressDetails}
+                                 addressDetails={addressDetails}
+                               />
+                             </div>
+                           </div>
+                           <br />
+                           <div className="col-12">
+                             <div className="pt-2 pb-2">
+                               <GooglePlacesAutocomplete
+                                 selectProps={{
+                                   defaultInputValue: user?.location ? user?.location : '',
+                                   value,
+                                   onChange: handleChangeLocation,
+                                 }}
+                               />
+                             </div>
+                           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               values.latitude = latitude;
+   values.longitude = longitude;
+   values.location = addressValue;
